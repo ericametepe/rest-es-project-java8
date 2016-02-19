@@ -1,0 +1,64 @@
+{
+"gocpf": {
+"mappings": {
+"formation": {
+"properties": {
+"codeCPF": {
+"type": "string"
+},
+"codeCertifInfo": {
+"type": "string"
+},
+"codeInventaire": {
+"type": "string"
+},
+"codeNSF": {
+"type": "string"
+},
+"codeRNCP": {
+"type": "string"
+},
+"codeRome": {
+"type": "string"
+},
+"debutdevalidite": {
+"type": "long"
+},
+"findevalidite": {
+"type": "long"
+},
+"formacode": {
+"type": "string"
+},
+"id": {
+"type": "string"
+},
+"intitule": {
+"properties": {
+"originalText": {
+"type": "string",
+"analyzer": "standard"
+},
+"originalTextSansAccent": {
+"type": "string",
+ "analyzer":       "folding"
+}
+}
+},
+"niveau": {
+"type": "string"
+},
+"organismeEditeur": {
+"type": "string"
+},
+"organismecertificateur": {
+"type": "string"
+},
+"publicAuditeur": {
+"type": "string"
+}
+}
+}
+}
+}
+}
