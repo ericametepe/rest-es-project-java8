@@ -37,7 +37,7 @@ public class AuditeurResource {
 	private AuditeurRepository auditeurRepository;
 
 	/**
-	 * POST /auditeurs -> Create a new book.
+	 * POST /auditeurs -> Create a new auditeur.
 	 */
 	@RequestMapping(value = "/auditeurs", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> create(@Valid @RequestBody Auditeur auditeur) throws URISyntaxException {
@@ -50,7 +50,7 @@ public class AuditeurResource {
 	}
 
 	/**
-	 * GET /auditeurs/:id -> get the "id" book.
+	 * GET /auditeurs/:id -> get the "id" auditeur.
 	 */
 	@RequestMapping(value = "/auditeurs/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Auditeur> get(@PathVariable String id) {
@@ -67,7 +67,7 @@ public class AuditeurResource {
 	}
 
 	/**
-	 * PUT /auditeurs -> Updates an existing book.
+	 * PUT /auditeurs -> Updates an existing auditeur.
 	 */
 	@RequestMapping(value = "/auditeurs", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> update(@Valid @RequestBody Auditeur auditeur) throws URISyntaxException {
@@ -81,7 +81,7 @@ public class AuditeurResource {
 	
 	
     /**
-     * DELETE  /books/:id -> delete the "id" book.
+     * DELETE  /auditeurs/:id -> delete the "id" auditeur.
      */
     @RequestMapping(value = "/auditeurs/{id}",
             method = RequestMethod.DELETE,

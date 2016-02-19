@@ -37,7 +37,7 @@ public class NiveauResource {
 	  
 
 	    /**
-	     * POST  /books -> Create a new book.
+	     * POST  /Niveaus -> Create a new Niveau.
 	     */
 	    @RequestMapping(value = "/niveaux",
 	            method = RequestMethod.POST,
@@ -52,13 +52,13 @@ public class NiveauResource {
 	    }
 
 	    /**
-	     * PUT  /books -> Updates an existing book.
+	     * PUT  /Niveaus -> Updates an existing Niveau.
 	     */
 	    @RequestMapping(value = "/niveaux",
 	        method = RequestMethod.PUT,
 	        produces = MediaType.APPLICATION_JSON_VALUE)
 	    public ResponseEntity<Void> update(@Valid @RequestBody Niveau niveau) throws URISyntaxException {
-	        log.debug("REST request to update Book : {}", niveau);
+	        log.debug("REST request to update Niveau : {}", niveau);
 	        if (niveau.getId() == null) {
 	            return create(niveau);
 	        }
@@ -67,7 +67,7 @@ public class NiveauResource {
 	    }
 
 	    /**
-	     * GET  /books -> get all the books.
+	     * GET  /Niveaus -> get all the Niveaus.
 	     */
 	    @RequestMapping(value = "/niveaux",
 	            method = RequestMethod.GET,
@@ -79,7 +79,7 @@ public class NiveauResource {
 	    }
 
 	    /**
-	     * GET  /niveaux/:id -> get the "id" book.
+	     * GET  /niveaux/:id -> get the "id" Niveau.
 	     */
 	    @RequestMapping(value = "/niveaux/{id}",
 	            method = RequestMethod.GET,
@@ -94,13 +94,13 @@ public class NiveauResource {
 	    }
 
 	    /**
-	     * DELETE  /niveaux/:id -> delete the "id" book.
+	     * DELETE  /niveaux/:id -> delete the "id" Niveau.
 	     */
 	    @RequestMapping(value = "/niveaux/{id}",
 	            method = RequestMethod.DELETE,
 	            produces = MediaType.APPLICATION_JSON_VALUE)
 	    public void delete(@PathVariable String id) {
-	        log.debug("REST request to delete Book : {}", id);
+	        log.debug("REST request to delete Niveau : {}", id);
 	        niveauRepository.delete(id);
 	    }
 

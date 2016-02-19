@@ -1,20 +1,24 @@
-spring-data-elasticsearch-sample
+POC on professional training search
 ================================
-
-spring boot elasticsearch sample
-
-
-  1. Install Elasticsearch
-
-  2. Install Gradle
-
-  3. IDE Eclipse or Intellij  IDEA
-
-Step by Step Coding
+  Prerequisites
+ - JDK 8
+ -  Maven 3
+ - Eclipse or IntelliJ IDEA
 
 
-En:  
-      http://java.dzone.com/articles/first-step-spring-boot-and
+  1. Install & Start Elasticsearch (Spring Data supports : elasticsearch-1.7.3) add your ES host & port to /src/main/resources/elasticsearch.properties
 
-Vi:   
-      http://javadanang.com/497/spring-boot-ket-hop-voi-elasticsearch.html
+  2. Start the App : mvn clean spring-boot:run
+
+  3. Init the index with REST Api (by Swagger) : http://localhost:8080/docs/index.html#!/service%2Fformations/populate.
+  
+  4. Test http://localhost:8080/docs/index.html#!/service%2Fformations/getAll
+  
+  5. Then ad references : http://localhost:8080/docs/index.html#!/service%2Fformations/updateWithRefDatas
+  
+  
+  Enjoy search of professional trainings
+
+
+
+

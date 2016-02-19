@@ -86,7 +86,7 @@ public class OrganismeResource {
 	        method = RequestMethod.PUT,
 	        produces = MediaType.APPLICATION_JSON_VALUE)
 	    public ResponseEntity<Void> update(@Valid @RequestBody Organisme organisme) throws URISyntaxException {
-	        log.debug("REST request to update Book : {}", organisme);
+	        log.debug("REST request to update Organisme : {}", organisme);
 	        if (organisme.getId() == null) {
 	            return create(organisme);
 	        }

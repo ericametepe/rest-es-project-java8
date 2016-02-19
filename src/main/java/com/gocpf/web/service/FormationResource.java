@@ -140,8 +140,7 @@ public class FormationResource {
 	@Inject
 	private FormationConverter formationConverter;
 
-//	private static final String NIVEAU_FILE="/Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/resources/niveaux.json";
-	private static final String NIVEAU_FILE="classpath:///niveaux.json";
+	private static final String NIVEAU_FILE="/Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/resources/niveaux.json";
 	
 	
 
