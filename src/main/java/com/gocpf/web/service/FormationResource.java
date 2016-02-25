@@ -1,5 +1,4 @@
 
-
 package com.gocpf.web.service;
 
 import java.io.File;
@@ -112,7 +111,7 @@ public class FormationResource {
 
 	private static final String FILE_CODEAPE_CSV = "CPNE-liste-codeAPE.csv";
 
-	private static final String FILE_FORMATION_CSV = "/Users/kodjovi1/Desktop/CPF/all/csv/liste-cpf-2016.csv";
+	private static final String FILE_FORMATION_CSV = "liste-cpf-2016.csv";
 
 	// private static final String FILE_FORMATION_CSV =
 	// "classpath:liste-cpf-2016.csv";
@@ -183,17 +182,18 @@ public class FormationResource {
 
 	}
 
-	public Set<FormationDto> getByPublicAuditeurAndCouvertureGeoAndIntitule(
-			 String pub,  String region, String intitule,String clea) {
+	public Set<FormationDto> getByPublicAuditeurAndCouvertureGeoAndIntitule(String pub, String region, String intitule,
+			String clea) {
 
 		Set<FormationDto> formations = formationConverter.toDtos(Sets.newHashSet(
 				formationRepository.findByPublicAuditeurAndCouvertureGeoAndIntituleOriginalTextSansAccent(pub, region,
 						org.apache.commons.lang3.StringUtils
 								.stripAccents(intitule.replaceAll(SPECIAL_CHARACTER, " ")))));
-		
-		Iterables.concat(formationRepository.findByPublicAuditeurAndCouvertureGeoAndIntituleOriginalTextSansAccent(pub, region, stripeSpecialCharacter(intitule)));
 
-		return  formations;
+		Iterables.concat(formationRepository.findByPublicAuditeurAndCouvertureGeoAndIntituleOriginalTextSansAccent(pub,
+				region, stripeSpecialCharacter(intitule)));
+
+		return formations;
 	}
 
 	@RequestMapping(value = "/formations/niveaux", method = RequestMethod.GET)
@@ -278,7 +278,7 @@ public class FormationResource {
 		if (!formationToSave.isEmpty()) {
 			formationRepository.save(formationToSave);
 		}
-		
+
 		LOG.info("========== Code APE SET done =====");
 		return ResponseEntity.ok().build();
 	}
@@ -357,12 +357,11 @@ public class FormationResource {
 		{
 			formationRepository.save(formationsWithPub);
 		}
-		
-		
+
 		try {
 			updateWithCodeAPE();
 		} catch (IOException e) {
-		LOG.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 		}
 
 		return ResponseEntity.ok().build();
@@ -509,10 +508,8 @@ public class FormationResource {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/formations/populate", method = RequestMethod.POST)
-	@ApiOperation(value = "Init the ES index ", notes = "This can only be done by the admin user.")
-	public ResponseEntity<Void> populate(
-			@ApiParam(value = "CSV file to convert to documents with column header : [ organismeediteur	public	intitule	certificateur	niveau	codeRNCP	codeInventaire	codeCertifInfo	codeOffre	codeCPF	debutValidite	finValidite	codeNSF	codeROME	formacode]  ", required = true) @RequestParam String filepath)
-					throws URISyntaxException, IOException {
+	@ApiOperation(value = "Init the ES index ", notes = "CSV file to import to documents with column header : [ organismeediteur	public	intitule	certificateur	niveau	codeRNCP	codeInventaire	codeCertifInfo	codeOffre	codeCPF	debutValidite	finValidite	codeNSF	codeROME	formacode] ")
+	public ResponseEntity<Void> populate() throws URISyntaxException, IOException {
 
 		// File csvFile = getFileFromClasspath(FILE_FORMATION_CSV);
 
@@ -520,8 +517,8 @@ public class FormationResource {
 		// ClassPathResource(FILE_FORMATION_CSV);
 		// Resources.getResource(FILE_FORMATION_CSV);
 
-		List<CSVRecord> csvRecords = dataConversionService.convertCSVFileToRecod(new File(filepath),
-				FILE_FORMATION_HEADER);
+		List<CSVRecord> csvRecords = dataConversionService
+				.convertCSVFileToRecod(getFileFromClasspath(FILE_FORMATION_CSV), FILE_FORMATION_HEADER);
 		List<Formation> formations = new ArrayList<Formation>();
 
 		for (CSVRecord csvRecord : csvRecords) {
@@ -607,16 +604,16 @@ public class FormationResource {
 	}
 
 	public static File getFileFromClasspath(String filepath) throws IOException {
-	
+
 		ClassPathResource classPathResource = new ClassPathResource(filepath);
 
-        InputStream inputStream = classPathResource.getInputStream();
-        File somethingFile = File.createTempFile(filepath.split("\\.")[0], "."+filepath.split("\\.")[1]);
-        try {
-            FileUtils.copyInputStreamToFile(inputStream, somethingFile);
-        } finally {
-            IOUtils.closeQuietly(inputStream);
-        }
+		InputStream inputStream = classPathResource.getInputStream();
+		File somethingFile = File.createTempFile(filepath.split("\\.")[0], "." + filepath.split("\\.")[1]);
+		try {
+			FileUtils.copyInputStreamToFile(inputStream, somethingFile);
+		} finally {
+			IOUtils.closeQuietly(inputStream);
+		}
 		return somethingFile;
 	}
 
@@ -643,8 +640,9 @@ public class FormationResource {
 		List<CouvertureGeo> couvertureGeos = new ArrayList<>();
 
 		try {
-			couvertureGeos = objectMapper.readValue(getFileFromClasspath(file), new TypeReference<List<CouvertureGeo>>() {
-			});
+			couvertureGeos = objectMapper.readValue(getFileFromClasspath(file),
+					new TypeReference<List<CouvertureGeo>>() {
+					});
 		} catch (JsonParseException e) {
 			LOG.error(e.getMessage(), e);
 
@@ -714,7 +712,8 @@ public class FormationResource {
 
 		if (isDemandeur(pub) || isToutPublic(pub)) {
 			LOG.info("params :" + "pub: " + pub + "clea: " + clea + "region: " + region + "intitule: " + intitule);
-//			   getByPublicAuditeurAndCouvertureGeoAndIntitule(pub, region, stripeSpecialCharacter(intitule));
+			// getByPublicAuditeurAndCouvertureGeoAndIntitule(pub, region,
+			// stripeSpecialCharacter(intitule));
 
 		}
 
@@ -873,8 +872,7 @@ public class FormationResource {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		try {
-			auditeurs = objectMapper.readValue(
-					getFileFromClasspath(FILE_AUDITEURS_JSON),
+			auditeurs = objectMapper.readValue(getFileFromClasspath(FILE_AUDITEURS_JSON),
 					new TypeReference<List<Auditeur>>() {
 					});
 		} catch (JsonParseException e) {
