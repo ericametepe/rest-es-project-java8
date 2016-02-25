@@ -2,6 +2,7 @@ com/gocpf/web/service/FormationResource$3.class
 com/gocpf/entities/Tag.class
 com/gocpf/web/service/AuditeurType.class
 com/gocpf/entities/CouvertureGeo.class
+com/gocpf/web/service/CouvertureGeoType.class
 com/gocpf/entities/Formation.class
 com/gocpf/entities/Organisme.class
 com/gocpf/web/service/Rating.class
@@ -18,6 +19,7 @@ com/gocpf/configuration/ElasticsearchConfiguration.class
 com/gocpf/entities/Auditeur.class
 com/gocpf/entities/Activite.class
 com/gocpf/service/DataConversionService.class
+com/gocpf/web/service/CouvertureGeoServiceImpl.class
 com/gocpf/web/service/FormationResource.class
 com/gocpf/entities/Intitule.class
 com/gocpf/web/service/AuditeurResource.class

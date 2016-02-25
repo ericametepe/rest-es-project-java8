@@ -4,19 +4,68 @@ package com.gocpf.repository;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Optional;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.DefaultResourceLoader;
 
 public class UtilityTest {
 	
 	private static final Logger LOG =LoggerFactory.getLogger(UtilityTest.class);
 	
 	private static final String DIR_CSV = "/Users/kodjovi1/Desktop/CPF/";
+	
+	private static final String FILE_CSV = "liste-cpf-2016.csv";
+	
+	private static final String REGION_JSON = "regions.json";
+	
+	
+	@Test
+	public void testOpt(){
+		Optional<String> opt=Optional.of(REGION_JSON);
+		
+		System.out.println(opt.orElse("Null is not a value"));
+		
+	}
+
+	
+	
+	@Test
+	public void testM() throws IOException{
+		ClassPathResource classPathResource = new ClassPathResource(REGION_JSON);
+
+        InputStream inputStream = classPathResource.getInputStream();
+        File somethingFile = File.createTempFile(FILE_CSV.split("\\.")[0], "."+FILE_CSV.split("\\.")[1]);
+        try {
+            FileUtils.copyInputStreamToFile(inputStream, somethingFile);
+        } finally {
+            IOUtils.closeQuietly(inputStream);
+        }
+        
+        System.out.println(""+somethingFile.getName());
+		assertTrue(somethingFile!=null);
+	}
+
+	
+	
+	@Test
+	public void testLoad() throws IOException{
+		System.out.println(FILE_CSV.split("\\.")[1]);
+		final DefaultResourceLoader loader = new DefaultResourceLoader();
+		File  src = loader.getResource(FILE_CSV).getFile();
+		
+	    System.out.println(src.exists());
+	}
 	
 	
 	@Test

@@ -1,8 +1,10 @@
 package com.gocpf.service.impl;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 import org.apache.commons.csv.CSVFormat;
@@ -20,7 +22,6 @@ public class DataConversionServiceImpl implements DataConversionService {
 	private FormationRepository formationRepository;
 	private Character delim = ';';
 	
-	private static final String FILE_CSV = "/Users/kodjovi1/Desktop/CPF/ListingFormations/csv/Certif_publies_CPF_26-10-15.csv";
 	
 	private static final String[] FILE_HEADER = { "organismeEditeur", "niveau", "intitule", "certificateur", "codeRNCP",
 			"codeInventaire", "codeCertifInfo", "codeCPF", "public" };
@@ -28,7 +29,7 @@ public class DataConversionServiceImpl implements DataConversionService {
 	private static final String[] FILE_HEADER_APE = { "code", "intitule"};
 
 	@Override
-	public List<CSVRecord> convertCSVFileToRecod (String file, String[] header) {
+	public List<CSVRecord> convertCSVFileToRecod (File file, String[] header) {
 		
 		
 		CSVFormat csvFormat = CSVFormat.DEFAULT.withHeader(header).withDelimiter(delim);

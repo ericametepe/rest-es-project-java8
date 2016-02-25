@@ -15,7 +15,9 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 import javax.annotation.Resource;
 
 /**
- * Created by hungnguyen on 12/16/14.
+ * 
+ * @author kodjovi1
+ *
  */
 @Configuration
 @PropertySource(value = "classpath:elasticsearch.properties")

@@ -15,8 +15,8 @@ public class CouvertureGeo {
     @Id
 	private String id;
     private String nom;
-    private List<String> dpt=new ArrayList<String>();
-    private String comite;
+    private List<String> dpt=new ArrayList<>();
+    private List<String> comite= new ArrayList<>();
     
     public CouvertureGeo() {
 	}
@@ -45,25 +45,14 @@ public class CouvertureGeo {
 		this.dpt = dpt;
 	}
 
-	public String getComite() {
+	public List<String> getComite() {
 		return comite;
 	}
 
-	public void setComite(String comite) {
+	public void setComite(List<String> comite) {
 		this.comite = comite;
 	}
 
-	public CouvertureGeo(String id, String nom, String comite,List<String> dpt) {
-		this.id = id;
-		this.nom = nom;
-		this.comite = comite;
-		this.dpt = dpt;
-	}
-
-
-    
-    
-    
 	
 
    

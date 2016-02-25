@@ -8,5 +8,6 @@ public interface CouvertureGeoRepository extends ElasticsearchRepository<Couvert
 	
 	CouvertureGeo findByNom(String name);
 	
+	
 
 }

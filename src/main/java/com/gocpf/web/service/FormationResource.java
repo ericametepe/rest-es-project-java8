@@ -1,8 +1,10 @@
 
+
 package com.gocpf.web.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
@@ -12,13 +14,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.common.collect.Sets;
 import org.joda.time.DateTime;
@@ -28,6 +31,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -62,16 +68,20 @@ import com.gocpf.service.FormationConverter;
 import com.gocpf.service.FormationDto;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping(value = "/service")
 public class FormationResource {
 
+	public static final String FILE_AUDITEURS_JSON = "auditeurs.json";
+
 	public static final String CODE_APE_SEPARATOR = ".";
 
 	private static final String SPECIAL_CHARACTER = "[^\\p{L}\\p{Nd}]+";
-	
-	private static final String REGION_FILE ="/Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/resources/regions.json";
+
+	private static final String FILE_REGION_JSON = "regions.json";
 
 	private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
@@ -93,13 +103,19 @@ public class FormationResource {
 	@Inject
 	private DataConversionService dataConversionService;
 
+	@Inject
+	private ResourceLoader resourceLoader;
+
 	private Character delim = ';';
 
 	private static final String[] CODEAPE_BRANCHE_HEADER = { "codeAPE", "intitule", "branche" };
 
-	private static final String FILE_CODEAPE_CSV = "/Users/kodjovi1/Desktop/CPF/branchespro/CPNE-liste-codeAPE.csv";
+	private static final String FILE_CODEAPE_CSV = "CPNE-liste-codeAPE.csv";
 
-	private static final String FILE_FORMATION_CSV = "/Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/resources/liste-cpf-2016.csv";
+	private static final String FILE_FORMATION_CSV = "/Users/kodjovi1/Desktop/CPF/all/csv/liste-cpf-2016.csv";
+
+	// private static final String FILE_FORMATION_CSV =
+	// "classpath:liste-cpf-2016.csv";
 	private static final String DIR_CSV = "/Users/kodjovi1/Desktop/CPF/all";
 
 	private final static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -140,53 +156,44 @@ public class FormationResource {
 	@Inject
 	private FormationConverter formationConverter;
 
-	private static final String NIVEAU_FILE="/Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/resources/niveaux.json";
-	
-	
+	private static final String FILE_NIVEAU_JSON = "niveaux.json";
 
-	
-
-	
-
-	
-	
 	@RequestMapping(value = "/formations/certifinfo/{codeCertifInfo}", method = RequestMethod.GET)
 	public ResponseEntity<String> getFromHtl(@PathVariable String codeCertifInfo) {
-//		String url = "http://www.intercariforef.org/formations/certification-"+codeCertifInfo+".html";
-		
+		// String url =
+		// "http://www.intercariforef.org/formations/certification-"+codeCertifInfo+".html";
+
 		String url = "http://www.intercariforef.org/formations/certification-83578.html";
 		String res = null;
 		try {
 			Document doc = Jsoup.connect(url).get();
-			
+
 			Elements elements = doc.getElementsByClass("detaildip");
 			Element elements2 = doc.getElementById("lstBrancheEligibilite1");
-			
+
 			Elements element = doc.getElementsContainingText("Code CPF : 157068");
-       
-             res = elements2.text();
+
+			res = elements2.text();
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return new ResponseEntity<String>(res, HttpStatus.OK);
-		
+
 	}
-	
-	
-	
-	
-	@RequestMapping(value = "/formations/public/{pub}/region/{reg}/intitule/{intitule}", method = RequestMethod.GET)
-	public ResponseEntity<Set<FormationDto>> getPublicAuditeurAndCouvertureGeoAndIntitule(
-			@PathVariable(value = "pub") String pub, @PathVariable(value = "reg") String region,
-			@PathVariable(value = "intitule") String intitule) {
 
-		Set<FormationDto> formations = formationConverter.toDtos(Sets.newHashSet(formationRepository
-				.findByPublicAuditeurAndCouvertureGeoAndIntituleOriginalTextSansAccent(pub, region, org.apache.commons.lang3.StringUtils
-						.stripAccents(intitule.replaceAll(SPECIAL_CHARACTER, " ")))));
+	public Set<FormationDto> getByPublicAuditeurAndCouvertureGeoAndIntitule(
+			 String pub,  String region, String intitule,String clea) {
 
-		return new ResponseEntity<Set<FormationDto>>(formations, HttpStatus.OK);
+		Set<FormationDto> formations = formationConverter.toDtos(Sets.newHashSet(
+				formationRepository.findByPublicAuditeurAndCouvertureGeoAndIntituleOriginalTextSansAccent(pub, region,
+						org.apache.commons.lang3.StringUtils
+								.stripAccents(intitule.replaceAll(SPECIAL_CHARACTER, " ")))));
+		
+		Iterables.concat(formationRepository.findByPublicAuditeurAndCouvertureGeoAndIntituleOriginalTextSansAccent(pub, region, stripeSpecialCharacter(intitule)));
+
+		return  formations;
 	}
 
 	@RequestMapping(value = "/formations/niveaux", method = RequestMethod.GET)
@@ -198,13 +205,21 @@ public class FormationResource {
 		return new ResponseEntity<Set<String>>(niveaux, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/formations/regions", method = RequestMethod.GET)
+	public ResponseEntity<Set<String>> getRegion() {
+
+		Set<String> regions = Lists.newArrayList(formationRepository.findAll()).stream().map(f -> f.getCouvertureGeo())
+				.sorted().collect(Collectors.toSet());
+
+		return new ResponseEntity<Set<String>>(regions, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/formations/editeurs", method = RequestMethod.GET)
 	public ResponseEntity<Set<String>> getEditeur() {
 
 		Set<String> editeurs = Lists.newArrayList(formationRepository.findAll()).stream()
-				.map(f -> f.getOrganismeEditeur()).filter(f -> org.apache.commons.lang3.StringUtils.contains(f, CPNE)
-						|| org.apache.commons.lang3.StringUtils.contains(f, COPAREF))
-				.collect(Collectors.toSet());
+				.map(f -> f.getOrganismeEditeur())
+				.filter(o -> org.apache.commons.lang3.StringUtils.contains(o, COPAREF)).collect(Collectors.toSet());
 
 		return new ResponseEntity<Set<String>>(editeurs, HttpStatus.OK);
 	}
@@ -222,12 +237,12 @@ public class FormationResource {
 	}
 
 	@RequestMapping(value = "/formations/codeAPE", method = RequestMethod.PUT)
-	public ResponseEntity<Void> updateWithCodeAPE() {
+	public ResponseEntity<Void> updateWithCodeAPE() throws IOException {
 
 		List<BrancheAPE> brancheAPEs = new ArrayList<BrancheAPE>();
+		File in = getFileFromClasspath(FILE_CODEAPE_CSV);
 
-		List<CSVRecord> csvRecords = dataConversionService.convertCSVFileToRecod(FILE_CODEAPE_CSV,
-				CODEAPE_BRANCHE_HEADER);
+		List<CSVRecord> csvRecords = dataConversionService.convertCSVFileToRecod(in, CODEAPE_BRANCHE_HEADER);
 
 		csvRecords.forEach(c -> {
 			BrancheAPE brancheAPE = new BrancheAPE();
@@ -242,17 +257,6 @@ public class FormationResource {
 		LOG.info("============Branche initialised " + brancheAPEs.size());
 
 		List<Formation> formationToSave = new ArrayList<Formation>();
-
-		// brancheAPEs.forEach(b -> {
-		// formationRepository.findByOrganismeEditeur((b.getBranche())).forEach(f
-		// -> {
-		// f.addCodeAPE(b.getCodeAPE());
-		// formationToSave.add(f);
-		// });
-		// });
-
-		// brancheAPEs.stream().map(b ->
-		// b.getBranche()).collect(Collectors.toSet());
 
 		Lists.newArrayList(formationRepository.findAll()).forEach(f -> {
 			f.setCodeAPEs(brancheAPEs.stream()
@@ -274,6 +278,8 @@ public class FormationResource {
 		if (!formationToSave.isEmpty()) {
 			formationRepository.save(formationToSave);
 		}
+		
+		LOG.info("========== Code APE SET done =====");
 		return ResponseEntity.ok().build();
 	}
 
@@ -285,24 +291,6 @@ public class FormationResource {
 	@RequestMapping(value = "/formations/bulk", method = RequestMethod.PUT)
 	public ResponseEntity<Void> updateWithRefDatas() {
 
-		LOG.info("============ Niveau set id on Formation ===========");
-		
-		
-
-		
-//		List<Formation> formationsToSave = new ArrayList<>();
-//		
-//		for (Formation f: formationRepository.findAll()){
-//			for(Niveau n : niveauRepository.findAll()){
-//				if (org.apache.commons.lang3.StringUtils.equalsIgnoreCase(org.apache.commons.lang3.StringUtils.split(f.getNiveau(), "(")[0], n.getNom())){
-//					f.setNiveau(n.getId());
-//					formationsToSave.add(f);
-//					break;
-//				}
-//			}
-//		}
-//		
-		
 		LOG.info("============ Niveau set ===========");
 
 		List<Formation> formationsWithNiveauToSave = new ArrayList<Formation>();
@@ -318,28 +306,16 @@ public class FormationResource {
 			formationRepository.save(formationsWithNiveauToSave);
 		}
 		LOG.info("=============Niveau setting ok =================");
-		
-		
-		
-		
-
-		
-
-		
 
 		List<Formation> formationsWithCouv = new ArrayList<Formation>();
 
-		couvertureGeoRepository.findAll().forEach(c -> {
-			Lists.newArrayList(formationRepository.findAll()).stream()
-					.filter(f -> org.apache.commons.lang3.StringUtils.contains(
-							stripeSpecialCharacter(f.getOrganismeEditeur()), COPAREF)
-					&& org.apache.commons.lang3.StringUtils.contains(stripeSpecialCharacter(f.getOrganismeEditeur()),
-							stripeSpecialCharacter(c.getNom())))
-					.forEach(ff -> {
-				ff.setCouvertureGeo(c.getId());
-				formationsWithCouv.add(ff);
+		Lists.newArrayList(couvertureGeoRepository.findAll()).stream().forEach(c -> c.getComite().forEach(co -> {
+			formationRepository.findByOrganismeEditeur(co).stream().forEach(f -> {
+				f.setCouvertureGeo(c.getId());
+				formationsWithCouv.add(f);
 			});
-		});
+			;
+		}));
 
 		formationRepository.save(formationsWithCouv);
 
@@ -363,26 +339,7 @@ public class FormationResource {
 
 		LOG.info("============Update with couverture geo done==========");
 
-//		//
-//		List<Auditeur> auditeurs = new ArrayList<Auditeur>();
-//		Lists.newArrayList(formationRepository.findAll()).stream().map(Formation::getPublicAuditeur)
-//				.collect(Collectors.toSet()).forEach(p ->
-//
-//		{
-//					auditeurs.add(new Auditeur(org.apache.commons.lang3.RandomStringUtils.randomNumeric(1).toString(),
-//							p, "description to do"));
-//				});
-//
-//		auditeurRepository.deleteAll();
-//		if (!auditeurs.isEmpty())
-//
-//		{
-//			auditeurRepository.save(auditeurs);
-//		}
-		
-		
 		populateWithAuditeur();
-
 
 		//
 		List<Formation> formationsWithPub = new ArrayList<Formation>();
@@ -400,6 +357,13 @@ public class FormationResource {
 		{
 			formationRepository.save(formationsWithPub);
 		}
+		
+		
+		try {
+			updateWithCodeAPE();
+		} catch (IOException e) {
+		LOG.error(e.getMessage(), e);
+		}
 
 		return ResponseEntity.ok().build();
 
@@ -408,12 +372,13 @@ public class FormationResource {
 	@RequestMapping(value = "/formations/bulk/productionData", method = RequestMethod.PUT)
 	public ResponseEntity<Void> updateWithProductionData() {
 		List<Formation> formationsWithOrg = new ArrayList<Formation>();
-		
+
 		Addresse a = new Addresse("adresseLine1", "adresseLine2", "adresseLine3", "postalcode", "city", "country");
 		List<Session> sessions = new ArrayList<>();
 		sessions.add(new Session("code", "description", new DateTime().toDate(), new DateTime().plus(12).toDate()));
-		Organisme organisme = new Organisme("ORG", a , "telephoneFixe", "telephoneMobile", "fax", "url", "raisonSocial", sessions );
-		
+		Organisme organisme = new Organisme("ORG", a, "telephoneFixe", "telephoneMobile", "fax", "url", "raisonSocial",
+				sessions);
+
 		organismeRepository.deleteAll();
 		organismeRepository.save(organisme);
 
@@ -504,49 +469,6 @@ public class FormationResource {
 
 	}
 
-	@RequestMapping(value = "/formations/regions", method = RequestMethod.POST)
-	public ResponseEntity<Void> getAllRegion() {
-
-		Set<String> regions = new HashSet<String>();
-
-		List<Formation> formations = Lists.newArrayList(formationRepository.findAll());
-
-		for (Formation formation : formations) {
-			if (org.apache.commons.lang3.StringUtils.contains(formation.getOrganismeEditeur(), COPAREF)) {
-				regions.add(org.apache.commons.lang3.StringUtils.stripToNull(
-						org.apache.commons.lang3.StringUtils.remove(formation.getOrganismeEditeur(), COPAREF)));
-			}
-
-			if (org.apache.commons.lang3.StringUtils.contains(formation.getOrganismeEditeur(), COPANEF)) {
-				regions.add(NATIONAL);
-			}
-		}
-
-		couvertureGeoRepository.deleteAll();
-
-		List<CouvertureGeo> couvs = new ArrayList<CouvertureGeo>();
-		int i = 1;
-
-		for (String region : regions) {
-			CouvertureGeo couvertureGeo = new CouvertureGeo();
-			if (!StringUtils.equals(region, NATIONAL)) {
-				couvertureGeo.setComite(COPAREF + org.apache.commons.lang3.StringUtils.SPACE
-						+ org.apache.commons.lang3.StringUtils.lowerCase(region, Locale.FRENCH));
-			} else {
-				couvertureGeo.setComite(COPANEF + org.apache.commons.lang3.StringUtils.SPACE
-						+ org.apache.commons.lang3.StringUtils.lowerCase(region, Locale.FRENCH));
-			}
-			couvertureGeo.setNom(StringUtils.lowerCase(region, Locale.FRENCH));
-			couvertureGeo.setId(String.valueOf(++i));
-			couvs.add(couvertureGeo);
-		}
-
-		couvertureGeoRepository.save(couvs);
-
-		return ResponseEntity.ok().build();
-
-	}
-
 	@RequestMapping(value = "/formations/search", method = RequestMethod.GET)
 	ResponseEntity<Iterable<Formation>> getByCouvertureGeo(@RequestParam String couvGeo) {
 
@@ -584,11 +506,21 @@ public class FormationResource {
 	 * 
 	 * @return
 	 * @throws URISyntaxException
+	 * @throws IOException
 	 */
 	@RequestMapping(value = "/formations/populate", method = RequestMethod.POST)
-	public ResponseEntity<Void> populate() throws URISyntaxException {
+	@ApiOperation(value = "Init the ES index ", notes = "This can only be done by the admin user.")
+	public ResponseEntity<Void> populate(
+			@ApiParam(value = "CSV file to convert to documents with column header : [ organismeediteur	public	intitule	certificateur	niveau	codeRNCP	codeInventaire	codeCertifInfo	codeOffre	codeCPF	debutValidite	finValidite	codeNSF	codeROME	formacode]  ", required = true) @RequestParam String filepath)
+					throws URISyntaxException, IOException {
 
-		List<CSVRecord> csvRecords = dataConversionService.convertCSVFileToRecod(FILE_FORMATION_CSV,
+		// File csvFile = getFileFromClasspath(FILE_FORMATION_CSV);
+
+		// ClassPathResource csvFile = new
+		// ClassPathResource(FILE_FORMATION_CSV);
+		// Resources.getResource(FILE_FORMATION_CSV);
+
+		List<CSVRecord> csvRecords = dataConversionService.convertCSVFileToRecod(new File(filepath),
 				FILE_FORMATION_HEADER);
 		List<Formation> formations = new ArrayList<Formation>();
 
@@ -649,85 +581,89 @@ public class FormationResource {
 		}
 		// init couv geos
 
+		LOG.info("============= Start couvertureGeosInit   ==== ");
+
 		List<CouvertureGeo> couvertureGeosInit = new ArrayList<CouvertureGeo>();
 
-		couvertureGeosInit = (List<CouvertureGeo>) fromJsonFileToData( REGION_FILE);
+		couvertureGeosInit = (List<CouvertureGeo>) fromJsonFileToData(FILE_REGION_JSON);
 
 		couvertureGeoRepository.deleteAll();
-		Iterable<CouvertureGeo> geos = couvertureGeoRepository.save(couvertureGeosInit);
-		
-		
+		couvertureGeoRepository.save(couvertureGeosInit);
+
+		LOG.info("================ Couverture geo init done =======");
+
+		LOG.info("============= Start niveaux init    ==== ");
+
 		niveauRepository.deleteAll();
-		List<Niveau> niveauxInit= new ArrayList<Niveau>();
-		niveauxInit = fromNiveauJsonFileToData(NIVEAU_FILE);
+		List<Niveau> niveauxInit = new ArrayList<Niveau>();
+		niveauxInit = fromNiveauJsonFileToData(FILE_NIVEAU_JSON);
 		niveauRepository.deleteAll();
 		niveauRepository.save(niveauxInit);
-		
-		
-		LOG.info("================ Couverture geo init done =======");
-		
-		
-		
+
+		LOG.info("============= End niveaux init   ==== ");
 
 		return ResponseEntity.created(new URI("/formations/" + Lists.newArrayList(formationsS).size())).build();
 
 	}
+
+	public static File getFileFromClasspath(String filepath) throws IOException {
 	
-	
+		ClassPathResource classPathResource = new ClassPathResource(filepath);
+
+        InputStream inputStream = classPathResource.getInputStream();
+        File somethingFile = File.createTempFile(filepath.split("\\.")[0], "."+filepath.split("\\.")[1]);
+        try {
+            FileUtils.copyInputStreamToFile(inputStream, somethingFile);
+        } finally {
+            IOUtils.closeQuietly(inputStream);
+        }
+		return somethingFile;
+	}
+
 	private List<Niveau> fromNiveauJsonFileToData(String niveauFile) {
-		
+
 		ObjectMapper mapper = new ObjectMapper();
 		List<Niveau> niveaus = new ArrayList<>();
-		
+
 		try {
-			niveaus = mapper.readValue(new File(niveauFile), new TypeReference<List<Niveau>>() {});
+			niveaus = mapper.readValue(getFileFromClasspath(niveauFile), new TypeReference<List<Niveau>>() {
+			});
 		} catch (JsonParseException e) {
-			LOG.error(e.getMessage(),e);
+			LOG.error(e.getMessage(), e);
 		} catch (JsonMappingException e) {
-			LOG.error(e.getMessage(),e);
+			LOG.error(e.getMessage(), e);
 		} catch (IOException e) {
-			LOG.error(e.getMessage(),e);
+			LOG.error(e.getMessage(), e);
 		}
 		return niveaus;
 	}
 
-
-
-
-	static List<CouvertureGeo>   fromJsonFileToData(String file) {
+	static List<CouvertureGeo> fromJsonFileToData(String file) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		List<CouvertureGeo> couvertureGeos = new ArrayList<>();
-		
+
 		try {
-			couvertureGeos =objectMapper.readValue(
-					new File(file),
-					new TypeReference<List<CouvertureGeo>>(){});
+			couvertureGeos = objectMapper.readValue(getFileFromClasspath(file), new TypeReference<List<CouvertureGeo>>() {
+			});
 		} catch (JsonParseException e) {
-			LOG.error(e.getMessage(),e);
+			LOG.error(e.getMessage(), e);
 
 		} catch (JsonMappingException e) {
-			LOG.error(e.getMessage(),e);
+			LOG.error(e.getMessage(), e);
 
 		} catch (IOException e) {
-			LOG.error(e.getMessage(),e);
+			LOG.error(e.getMessage(), e);
 		}
 		return couvertureGeos;
-		
-		
+
 	}
 
-
-
-
-
 	public List<CouvertureGeo> jsonToData(List<CouvertureGeo> couvertureGeosInit, String filePath) {
-		
-		ObjectMapper objectMapper = new  ObjectMapper();
+
+		ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			couvertureGeosInit = objectMapper.readValue(
-					new File(filePath),
-					new TypeReference<List<CouvertureGeo>>() {
-					});
+			couvertureGeosInit = objectMapper.readValue(new File(filePath), new TypeReference<List<CouvertureGeo>>() {
+			});
 		} catch (JsonParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -774,55 +710,33 @@ public class FormationResource {
 			@RequestParam(required = true) String region, @RequestParam String codeAPE,
 			@RequestParam(required = true) String intitule, @RequestParam(required = true) String clea) {
 
-		LOG.info("params :" + "pub: " + pub + "clea: " + clea + "codeAPE: " + codeAPE + "region: " + region
-				+ "intitule: " + intitule);
-
 		// statut ~ tout public : statut ~ demandeur
 
 		if (isDemandeur(pub) || isToutPublic(pub)) {
-			Set<FormationProfileResponse> profileResponses = new HashSet<FormationProfileResponse>();
-
-			List<Formation> formationSearch = Lists.newArrayList(formationRepository
-					.findByPublicAuditeurAndCouvertureGeoAndIntituleOriginalTextSansAccent(pub, region, stripeSpecialCharacter(intitule)));
-
-			if (!isToutPublic(pub) && isClea(clea)) {
-				List<Formation> allPubformation = Lists.newArrayList(
-						getAllFormationToutPublicNational(org.apache.commons.lang3.StringUtils.stripAccents(intitule)));
-				profileResponses = Sets.newHashSet(convertToDTO(Iterables.concat(allPubformation, formationSearch,
-						getAllFormationDemandeurNational(stripeSpecialCharacter(intitule)))));
-
-			}
-
-			else {
-				profileResponses = convertToDTO(formationSearch);
-			}
-
-			return new ResponseEntity<Set<FormationProfileResponse>>(profileResponses, HttpStatus.OK);
+			LOG.info("params :" + "pub: " + pub + "clea: " + clea + "region: " + region + "intitule: " + intitule);
+//			   getByPublicAuditeurAndCouvertureGeoAndIntitule(pub, region, stripeSpecialCharacter(intitule));
 
 		}
 
-		else {
+		Set<FormationProfileResponse> profilSal = new HashSet<FormationProfileResponse>();
 
-			Set<FormationProfileResponse> profilSal = new HashSet<FormationProfileResponse>();
+		if (isSalarie(pub)) {
 
-			if (isSalarie(pub)) {
+			List<Formation> specificSearch = Lists.newArrayList(
+					formationRepository.findByPublicAuditeurAndCouvertureGeoAndIntituleAndCodeAPEsLike(pub, region,
+							stripeSpecialCharacter(intitule), codeAPE));
 
-				List<Formation> specificSearch = Lists.newArrayList(
-						formationRepository.findByPublicAuditeurAndCouvertureGeoAndIntituleAndCodeAPEsLike(pub, region,
-								stripeSpecialCharacter(intitule), codeAPE));
+			if (isClea(clea)) {
 
-				if (isClea(clea)) {
+				profilSal = convertToDTO(Iterables.concat(specificSearch,
+						getAllFormationSalarieNational(stripeSpecialCharacter(intitule)),
+						getByToutPublicAndNational(stripeSpecialCharacter(intitule))));
 
-					profilSal = convertToDTO(Iterables.concat(specificSearch,
-							getAllFormationSalarieNational(stripeSpecialCharacter(intitule)),
-							getAllFormationToutPublicNational(stripeSpecialCharacter(intitule))));
-
-				} else {
-					profilSal = convertToDTO(specificSearch);
-				}
+			} else {
+				profilSal = convertToDTO(specificSearch);
 			}
-			return new ResponseEntity<Set<FormationProfileResponse>>(profilSal, HttpStatus.OK);
 		}
+		return new ResponseEntity<Set<FormationProfileResponse>>(profilSal, HttpStatus.OK);
 
 	}
 
@@ -838,7 +752,8 @@ public class FormationResource {
 		LOG.info("allRegionId: " + allRegionId + "allPubId: " + allPubId);
 
 		List<Formation> formations = Lists.newArrayList(
-				formationRepository.findByPublicAuditeurAndCouvertureGeoAndIntituleOriginalTextSansAccent(allPubId, allRegionId, intitule));
+				formationRepository.findByPublicAuditeurAndCouvertureGeoAndIntituleOriginalTextSansAccent(allPubId,
+						allRegionId, intitule));
 
 		LOG.info("All size :" + formations.size());
 		return formations;
@@ -852,21 +767,18 @@ public class FormationResource {
 		LOG.info("allRegionId: " + allRegionId + "allPubId: " + allPubId);
 
 		List<Formation> formations = Lists.newArrayList(
-				formationRepository.findByPublicAuditeurAndCouvertureGeoAndIntituleOriginalTextSansAccent(allPubId, allRegionId, intitule));
+				formationRepository.findByPublicAuditeurAndCouvertureGeoAndIntituleOriginalTextSansAccent(allPubId,
+						allRegionId, intitule));
 
 		LOG.info("getAllFormationSalarieNational :" + formations.size());
 		return formations;
 	}
 
-	public Iterable<Formation> getAllFormationToutPublicNational(String intitule) {
+	public Iterable<Formation> getByToutPublicAndNational(String intitule) {
 
-		String allRegionId = couvertureGeoRepository.findByNom(NATIONAL).getId();
-		String allPubId = auditeurRepository.findByNom(TOUT_PUBLIC).get().getId();
-
-		LOG.info("allRegionId: " + allRegionId + "allPubId: " + allPubId);
-
-		List<Formation> formations = Lists.newArrayList(
-				formationRepository.findByPublicAuditeurAndCouvertureGeoAndIntituleOriginalTextSansAccent(allPubId, allRegionId, intitule));
+		List<Formation> formations = Lists.newArrayList(formationRepository
+				.findByPublicAuditeurAndCouvertureGeoAndIntituleOriginalTextSansAccent(AuditeurType.ALL.getId(),
+						CouvertureGeoType.NATIONAL.getId(), stripeSpecialCharacter(intitule)));
 
 		LOG.info("All size :" + formations.size());
 		return formations;
@@ -877,13 +789,11 @@ public class FormationResource {
 	}
 
 	private boolean isToutPublic(String pub) {
-		
-        return org.apache.commons.lang3.StringUtils.equals(pub, AuditeurType.ALL.getId());
+		return org.apache.commons.lang3.StringUtils.equals(pub, AuditeurType.ALL.getId());
 	}
 
 	private boolean isDemandeur(String pub) {
-		Auditeur auditeur = auditeurRepository.findOne(pub);
-		return  org.apache.commons.lang3.StringUtils.equals(auditeur.getNom(), AuditeurType.DE.name());
+		return org.apache.commons.lang3.StringUtils.equals(pub, AuditeurType.DE.getId());
 	}
 	//
 	// if
@@ -954,17 +864,17 @@ public class FormationResource {
 	}
 
 	public static String stripeSpecialCharacter(String intitule) {
-		return org.apache.commons.lang3.StringUtils.strip(intitule.replaceAll(SPECIAL_CHARACTER, " "));
+		return org.apache.commons.lang3.StringUtils
+				.stripAccents(org.apache.commons.lang3.StringUtils.strip(intitule.replaceAll(SPECIAL_CHARACTER, " ")));
 	}
-	
-	
-	public void populateWithAuditeur(){
+
+	public void populateWithAuditeur() {
 		List<Auditeur> auditeurs = new ArrayList<Auditeur>();
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		try {
 			auditeurs = objectMapper.readValue(
-					new File("/Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/resources/auditeurs.json"),
+					getFileFromClasspath(FILE_AUDITEURS_JSON),
 					new TypeReference<List<Auditeur>>() {
 					});
 		} catch (JsonParseException e) {
@@ -978,13 +888,12 @@ public class FormationResource {
 			e.printStackTrace();
 		}
 
-auditeurRepository.deleteAll();
+		auditeurRepository.deleteAll();
 
-auditeurRepository.save(auditeurs);
+		auditeurRepository.save(auditeurs);
 
 		LOG.info("================ Auditeurs  init done =======");
 
-		
 	}
 
 }

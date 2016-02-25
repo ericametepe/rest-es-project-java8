@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -93,11 +94,11 @@ public class CouvertureGeoRepositoryTest extends AbstractTest {
 		
 		for (CouvertureGeo couvertureGeo:couvs){
 			if (StringUtils.equals("National", couvertureGeo.getNom())){
-				couvertureGeo.setComite("COPANEF");
+				couvertureGeo.setComite(Arrays.asList("COPANEF"));
 				
 			}
 			else {
-				couvertureGeo.setComite("COPAREF ".concat(" ").concat(couvertureGeo.getNom()));
+				couvertureGeo.setComite(Arrays.asList("COPAREF ".concat(" ").concat(couvertureGeo.getNom())));
 			}
 			
 			couvsRes.add(couvertureGeo);

@@ -2,6 +2,7 @@
 /Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/java/com/gocpf/entities/Auditeur.java
 /Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/java/com/gocpf/repository/NiveauRepository.java
 /Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/java/com/gocpf/service/impl/PostServiceImpl.java
+/Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/java/com/gocpf/web/service/CouvertureGeoType.java
 /Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/java/com/gocpf/entities/Intitule.java
 /Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/java/com/gocpf/entities/Post.java
 /Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/java/com/gocpf/service/FormationConverter.java
@@ -19,6 +20,7 @@
 /Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/java/com/gocpf/repository/PostRepository.java
 /Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/java/com/gocpf/web/service/AuditeurType.java
 /Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/java/com/gocpf/service/DataConversionService.java
+/Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/java/com/gocpf/web/service/CouvertureGeoServiceImpl.java
 /Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/java/com/gocpf/web/service/OrganismeResource.java
 /Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/java/com/gocpf/service/FormationDto.java
 /Users/kodjovi1/Documents/workspace/gocpf-backend/src/main/java/com/gocpf/application/ApplicationGoCPF.java

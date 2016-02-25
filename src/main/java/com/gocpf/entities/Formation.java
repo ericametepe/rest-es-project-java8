@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Mapping;
 
 import com.gocpf.web.service.Rating;
 
@@ -14,7 +13,7 @@ import com.gocpf.web.service.Rating;
  * Created by kodjovi1 on 22/11/2015.
  */
 @Document(indexName = "gocpf",type="formation",shards = 1, replicas = 0, refreshInterval = "-1")
-@Mapping(mappingPath="classpath:formation-mapping.json")
+//@Mapping(mappingPath="classpath:formation-mapping.json")
 public class Formation {
     @Id
 	private String id;

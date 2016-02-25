@@ -2,7 +2,7 @@
   {
     "id": 1,
     "nom": "alsace",
-    "comite": "coparef alsace",
+    "comite": ["coparef alsace"],
     "dpt": [
       "67",
       "68"
@@ -11,7 +11,7 @@
   {
     "id": 2,
     "nom": "aquitaine",
-    "comite": "coparef aquitaine",
+    "comite": ["coparef aquitaine"],
     "dpt": [
       "40",
       "47",
@@ -23,7 +23,7 @@
   {
     "id": 3,
     "nom": "auvergne",
-    "comite": "coparef auvergne",
+    "comite": ["coparef auvergne"],
     "dpt": [
       "43",
       "3",
@@ -33,8 +33,8 @@
   },
   {
     "id": 4,
-    "nom": "basse-normandie",
-    "comite": "coparef basse-normandie",
+    "nom": "basse normandie",
+    "comite": ["coparef basse normandie","coparef haute normandie"],
     "dpt": [
       "14",
       "61",
@@ -44,7 +44,7 @@
   {
     "id": 5,
     "nom": "bourgogne",
-    "comite": "coparef bourgogne",
+    "comite": ["coparef bourgogne"],
     "dpt": [
       "21",
       "58",
@@ -55,7 +55,7 @@
   {
     "id": 6,
     "nom": "bretagne",
-    "comite": "coparef bretagne",
+    "comite":["coparef bretagne"],
     "dpt": [
       "29",
       "35",
@@ -66,7 +66,7 @@
   {
     "id": 7,
     "nom": "centre",
-    "comite": "coparef centre",
+    "comite": ["coparef centre"],
     "dpt": [
       "45",
       "37",
@@ -79,7 +79,7 @@
   {
     "id": 8,
     "nom": "champagne-ardenne",
-    "comite": "coparef champagne-ardenne",
+    "comite": ["coparef champagne ardenne"],
     "dpt": [
       "10",
       "8",
@@ -90,7 +90,7 @@
   {
     "id": 9,
     "nom": "corse",
-    "comite": "coparef corse",
+    "comite":["coparef corsica"],
     "dpt": [
       "2b",
       "2a"
@@ -98,8 +98,8 @@
   },
   {
     "id": 10,
-    "nom": "franche-compte",
-    "comite": "coparef franche-compte",
+    "nom": "franche comté",
+    "comite": ["coparef franche comté"],
     "dpt": [
       "39",
       "25",
@@ -110,7 +110,7 @@
   {
     "id": 11,
     "nom": "haute-normandie",
-    "comite": "coparef haute-normandie",
+    "comite": ["coparef haute-normandie"],
     "dpt": [
       "27",
       "76"
@@ -119,7 +119,7 @@
   {
     "id": 12,
     "nom": "languedoc-roussillon",
-    "comite": "coparef languedoc-roussillon",
+    "comite": ["coparef languedoc roussillon"],
     "dpt": [
       "48",
       "30",
@@ -131,7 +131,7 @@
   {
     "id": 13,
     "nom": "limousin",
-    "comite": "coparef limousin",
+    "comite": ["coparef limousin"],
     "dpt": [
       "19",
       "23",
@@ -141,7 +141,7 @@
   {
     "id": 14,
     "nom": "lorraine",
-    "comite": "coparef lorraine",
+    "comite": ["coparef lorraine"],
     "dpt": [
       "55",
       "54",
@@ -151,8 +151,8 @@
   },
   {
     "id": 15,
-    "nom": "midi-pyrennees",
-    "comite": "coparef midi-pyrennees",
+    "nom": "midi pyrénées",
+    "comite":["coparef midi pyrénées"],
     "dpt": [
       "46",
       "32",
@@ -167,7 +167,7 @@
   {
     "id": 16,
     "nom": "nord-pas-de-calais",
-    "comite": "coparef nord-pas-de-calais",
+    "comite":["coparef nord-pas de calais"],
     "dpt": [
       "62",
       "59"
@@ -176,7 +176,7 @@
   {
     "id": 17,
     "nom": "pays-de-la-loire",
-    "comite": "coparef pays-de-la-loire",
+    "comite":["coparef pays de la loire"],
     "dpt": [
       "49",
       "44",
@@ -188,7 +188,7 @@
   {
     "id": 18,
     "nom": "picardie",
-    "comite": "coparef picardie",
+    "comite": ["coparef picardie"],
     "dpt": [
       "2",
       "60",
@@ -198,7 +198,7 @@
   {
     "id": 19,
     "nom": "poitou-charentes",
-    "comite": "coparef poitou-charentes",
+    "comite": ["coparef poitou charentes"],
     "dpt": [
       "17",
       "16",
@@ -209,7 +209,7 @@
   {
     "id": 20,
     "nom": "provences-alpes-cote-dazur",
-    "comite": "coparef provences-alpes-cote-dazur",
+    "comite": ["coparef provence côte d'azur"],
     "dpt": [
       "4",
       "5",
@@ -221,8 +221,8 @@
   },
   {
     "id": 21,
-    "nom": "rhones-alpes",
-    "comite": "coparef rhones-alpes",
+    "nom": "rhône-alpes",
+    "comite": ["coparef rhône-alpes"],
     "dpt": [
       "38",
       "42",
@@ -236,8 +236,8 @@
   },
   {
     "id": 22,
-    "nom": "ile-de-france",
-    "comite": "coparef ile-de-france",
+    "nom": "ile de france",
+    "comite": ["coparef ile de france"],
     "dpt": [
       "77",
       "75",
@@ -252,7 +252,145 @@
   {
     "id": 23,
     "nom": "national",
-    "comite": "COPANEF national",
+    "comite": ["cpne de l'agriculture",
+  "cpefp de la couture",
+  "cpne de l'industrie textile",
+  "cpnefp de la branche des agents généraux d'assurance",
+  "cpnef de la publicité",
+  "cpne des réseaux de transports publics urbains de voyageurs",
+  "cpnefp de la branche commerce de détail de l'habillement et articles textiles",
+  "cpnef des personnels des structures associatives cynégétiques",
+  "cpne des cabinets ou entreprises d'expertises en automobiles",
+  "cpne de l'industrie du caoutchouc",
+  "cpne de la banque",
+  "cpnefp de la branche pêche de loisir et de la protection du milieu aquatique",
+  "cpnefp de l'industrie de la chaussure",
+  "cpnefp du négoce de l'ameublement",
+  "cpnefp des cabinets dentaires",
+  "cpnef de la distribution directe",
+  "cpne des coopératives de consommateurs",
+  "cpnef de la branche des organismes de formation",
+  "cpnefp des cabinets d'économistes de la construction et des métreurs-vérificateurs",
+  "cpnef des organismes de tourisme",
+  "cpnefp du négoce de bois",
+  "cpnefp de la branche quincaillerie, fournitures industrielles, fers, métaux et équipements de la maison",
+  "cpne de la presse et des agences de presse",
+  "cpne de la branche de la bijouterie, joaillerie, orfèvrerie, du cadeau, des diamants, pierres et activités qui s'y rattachent",
+  "cpnefp de la branche des gardiens, concierges et employés d'immeubles",
+  "cpnefp de la branche crédit agricole",
+  "cpnefp du commerce de gros en bonneterie, lingerie, confection, mercerie, chaussures et négoces connexes",
+  "cpnefp de la branche des industries et commerces de la récupération",
+  "cpnefp des jardineries et graineteries",
+  "cpnef des industries de l'habillement",
+  "cpnefp des sociétés d'expertise et d'évaluation",
+  "cpnef de la branche professionnelle des agences de voyages et de tourisme",
+  "cpne de la branche vétérinaire",
+  "cpnefp de la restauration rapide",
+  "cpnefp de la restauration commerciale libre-service",
+  "cpnefp de la branche de l'aide, de l'accompagnement des soins et des services à domicile",
+  "cpne de la branche caisse d'epargne",
+  "cpne de la branche du crédit mutuel",
+  "cpnefp des distributeurs conseils hors domicile",
+  "cpne des cabinets médicaux",
+  "cpne de l'hospitalisation privée",
+  "cpne des industries et des commerces en gros des vins, cidres, sprititueux, sirops, jus de fruits et boissons diverses",
+  "cpnef de l'animation socio-culturelle",
+  "cpnef des offices publics de l'habitat",
+  "cpnefp de la restauration collective",
+  "cpne de la branche assainissement et maintenance industrielle",
+  "cpne de la branche des casinos autorisés",
+  "cpnef dans le bâtiment et les travaux publics",
+  "cpnef personnel au sol de la branche du transport aérien",
+  "cpne de la branche sanitaire sociale et médico-sociale privée à but non lucratif",
+  "cpne de la branche de la miroiterie",
+  "cpne de l'édition",
+  "cpnefp des transports routiers et des activités auxiliaires du transport",
+  "cpne des services de l'automobile",
+  "cpnefp msa (mutualité sociale agricole)",
+  "cpne de l'imprimerie et des industries graphiques",
+  "cpne fabrication du verre à la main semi-automatique et mixte",
+  "cpnefp des personnels sédentaires du transport maritime",
+  "cpne des fleuristes, de la vente et des services des animaux familiers",
+  "cpnefp de la branche des pompes funèbres",
+  "cpnefp de l'hôtellerie de plein air",
+  "cpnefp sport",
+  "cpnef des organisations professionnelles de l'habitat social",
+  "cpnefp du commerce de détail de bricolage",
+  "cpne des articles de sport et équipements de loisirs",
+  "cpne du secteur alimentaire",
+  "cpnefp de la branche des entreprises d'architecture",
+  "cpne commerce de détail et de gros à prédominance alimentaire",
+  "cpnefp des entreprises de commission, de courtage et de commerce intra-communautaire et d'importation-exportation",
+  "cpnefp dans les établissements d'enseignement privés sous contrat",
+  "cpnefp négoce et distribution de combustibles solides, liquides, gazeux et produits pétroliers",
+  "cpnefp de la branche du commerce de l'optique-lunetterie de détail",
+  "cpnef des institutions de retraite complémentaire",
+  "cpne de la coiffure et des professions connexes",
+  "cpnefp de la branche des prestataires de services du secteur tertiaire",
+  "cpne de la branche des experts comptables et commissaires aux comptes",
+  "cpnefp des entreprises privées de services à la personne",
+  "cpne de l'ingénierie, des services informatiques et du conseil",
+  "cpnefp de la pharmacie d'officine",
+  "cpnefp de la vente à distance",
+  "cpnefp de la branche du spectacle vivant",
+  "cpnef de la branche des ateliers et chantiers d'insertion",
+  "copanef (comité paritaire interprofessionnel national pour l'emploi et la formation)",
+  "cpnefp de la branche de la promotion immobilière",
+  "cpnef médecine du travail",
+  "cpne des télécommunications",
+  "cpnefp de la branche du négoce des matériaux de construction",
+  "cpne industrie des cuirs et peaux",
+  "cpnefp des entreprises d'expédition et d'exportation de fruits et légumes",
+  "cpne des industries de carrières et des matériaux de construction",
+  "cpne ports et manutention portuaire",
+  "cpne des entreprises de désinfection, désinsectisation et dératisation (3d)",
+  "cpnefp de la branche des industries de la transformation des volailles",
+  "cpnef industries de la maroquinerie",
+  "cpne des industries de santé (cpneis) - branche industrie pharmaceutique",
+  "cpne des industries chimiques",
+  "cpnefp des jeux, jouets, articles de fêtes et ornements de noël, article de puériculture et voiture d'enfants, modélisme et indstries connexes",
+  "cpne de la branche banque populaire",
+  "cpnefp du commerce de détail des maisons à succursales de l'habillement",
+  "cpnefp des équipements thermiques et de génie climatique",
+  "cpf (accompagnement vae et socle de compétences)",
+  "cpne de l'industrie de fabrication mécanique du verre",
+  "cpnefp dans le notariat",
+  "cpne de la branche mutualité",
+  "liste à défaut de convention collective agefos pme",
+  "cpnefp de la branche du froid, des équipements de cuisines professionnelles et du conditionnement de l'air",
+  "cpnefp union des caisses nationales de sécurité sociale",
+  "cpnefp des huissiers de justice",
+  "cpnefp de la blanchisserie, laverie, location de linge, nettoyage à sec, pressing et teinturerie",
+  "cpne de la branche de la librairie",
+  "cpne des entreprises de services d'eau et d'assainissement",
+  "cpnefp de l'enseignement privé hors contrat",
+  "cpnefp de la branche des entreprises du négoce et de l'industrie des produits du sol, engrais et produits connexes",
+  "cpne du travail temporaire",
+  "cpnefp du commerce de détail des fruits et légumes, épicerie, produits laitiers",
+  "cpne de l'industrie hôtelière",
+  "cpne des entreprises équestres",
+  "cpne de l'industrie cimentière",
+  "cpnefp des grands magasins et magasins populaires",
+  "cpnefp de la branche du commerce de détail non alimentaire",
+  "cpnef des acteurs du lien social et familial : centres sociaux et socioculturels, associations d'accueil de jeunes enfants, associations de développement social local",
+  "cpne des industries de santé (cpnei) - branche de l'union",
+  "cpnefp des entreprises de l'esthétique-cosmétique",
+  "cpne des industries céramiques de france",
+  "cpnefp commerces de détail de papeterie, fournitures de bureau, de bureautique et d'informatique, de matériel, machines, de mobilier de bureau et de librairie",
+  "cpnef des espaces de loisirs, d'attractions et culturels",
+  "cpnefp des commerces de gros",
+  "cpne de l'immobilier",
+  "cpnefp des sociétés d'assurances",
+  "cpne commerce de détail de l'horlogerie-bijouterie",
+  "cpne de la métallurgie",
+  "cpnefp de la propreté",
+  "cpnefp de la branche des détaillants en chaussures",
+  "cpnefp des personnels navigants du transport maritime",
+  "cpne de la transformation des matières plastiques",
+  "cpne des prothésistes dentaires",
+  "cpnefp des organismes de prévention et de sécurité",
+  "cpnef de l'exploitation cinématographique et de la distribution de films",
+  "cpnefp des commerces et services de l'audiovisuel, de l'électronique et de l'équipement ménager"],
     "dpt": [
       "77",
       "75",
@@ -263,5 +401,27 @@
       "95",
       "94"
     ]
-  }
+  },
+  { "id" : 24,
+    "nom" : "guyane",
+    "comite": [ "coparef guyane"],
+    "dpt":[]
+  },
+    { "id" : 25,
+    "nom" : "martinique",
+    "comite": [ "coparef martinique"],
+    "dpt":[]
+  },
+  
+     { "id" : 26,
+    "nom" : "guadeloupe",
+    "comite": [ "coparef guadeloupe"],
+    "dpt":[]
+  },
+  
+       { "id" : 27,
+    "nom" : "réunion",
+    "comite": ["coparef la réunion"],
+    "dpt":[]
+  } 
 ]

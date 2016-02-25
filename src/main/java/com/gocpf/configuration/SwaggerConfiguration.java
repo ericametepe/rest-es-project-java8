@@ -23,8 +23,8 @@ public class SwaggerConfiguration {
 	public SwaggerSpringMvcPlugin configureSwagger() {
 
 		ApiInfo apiInfo = new ApiInfoBuilder()
-		.title("Classup REST API")
-		.description("Classup Api for creating and managing enrolments")
+		.title("GoCPF REST API")
+		.description("GoCPF REST API Api for search and recommendations")
 		.termsOfServiceUrl("http://example.com/terms-of-service")
 		.contact("info@example.com").license("MIT License")
 		.licenseUrl("http://opensource.org/licenses/MIT").build();
